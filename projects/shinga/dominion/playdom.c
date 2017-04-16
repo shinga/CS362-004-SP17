@@ -10,10 +10,11 @@ int main (int argc, char** argv) {
 
   printf ("Starting game.\n");
 
-  initializeGame(2, k, atoi(argv[1]), &G);
+  int seed = atoi(argv[1]);
+  initializeGame(2, k, seed, &G);
 
   int money = 0;
-  int smithyPos = -1;
+  int minePos = -1;
   int adventurerPos = -1;
   int i=0;
 
@@ -22,7 +23,7 @@ int main (int argc, char** argv) {
 
   while (!isGameOver(&G)) {
     money = 0;
-    smithyPos = -1;
+    minePos = -1;
     adventurerPos = -1;
     for (i = 0; i < numHandCards(&G); i++) {
       if (handCard(i, &G) == copper)
@@ -31,17 +32,17 @@ int main (int argc, char** argv) {
     money += 2;
       else if (handCard(i, &G) == gold)
     money += 3;
-      else if (handCard(i, &G) == smithy)
-    smithyPos = i;
+      else if (handCard(i, &G) == mine)
+    minePos = i;
       else if (handCard(i, &G) == adventurer)
     adventurerPos = i;
     }
 
     if (whoseTurn(&G) == 0) {
-      if (smithyPos != -1) {
-        printf("0: smithy played from position %d\n", smithyPos);
-        playCard(smithyPos, -1, -1, -1, &G);
-        printf("smithy played.\n");
+      if (minePos != -1) {
+        printf("0: mine played from position %d\n", minePos);
+        playCard(minePos, -1, -1, -1, &G);
+        printf("mine played.\n");
         money = 0;
         i=0;
         while(i<numHandCards(&G)){
@@ -69,9 +70,9 @@ int main (int argc, char** argv) {
         printf("0: bought gold\n");
         buyCard(gold, &G);
       }
-      else if ((money >= 4) && (numSmithies < 2)) {
-        printf("0: bought smithy\n");
-        buyCard(smithy, &G);
+      else if ((money >= 5) && (numSmithies < 2)) {
+        printf("0: bought mine\n");
+        buyCard(mine, &G);
         numSmithies++;
       }
       else if (money >= 3) {
