@@ -53,14 +53,17 @@ randomtestcard2: randomtestcard2.c dominion.o rngs.o myassert.o interface.o
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o myassert.o interface.o
 	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o myassert.o interface.o $(CFLAGS)
 
-randomtestresults.out: randomtestcard1 randomtestcard2 randomtestadventurer
-	./randomtestcard1 > randomtestresults.out
-	gcov -b dominion.o >> unittestresults.out
-	./randomtestcard2 > randomtestresults.out
-	gcov -b dominion.o >> unittestresults.out
-	./randomtestadventurer > randomtestresults.out
-	gcov -b dominion.o >> unittestresults.out
+randomtestcard1.out: randomtestcard1
+	./randomtestcard1 > randomtestcard1.out
+	gcov -b dominion.o >> randomtestcard1.out
 
+randomtestcard2.out: randomtestcard2
+	./randomtestcard2 > randomtestcard2.out
+	gcov -b dominion.o >> randomtestcard2.out
+
+randomtestadventurer.out: randomtestadventurer
+	./randomtestadventurer > randomtestadventurer.out
+	gcov -b dominion.o >> randomtestadventurer.out
 
 testAll: dominion.o testSuite.c
 	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
