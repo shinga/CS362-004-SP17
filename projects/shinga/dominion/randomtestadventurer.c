@@ -13,7 +13,8 @@ int checkAdventurer(int p, struct gameState *post) {
   struct gameState pre;
   memcpy (&pre, post, sizeof(struct gameState));
 
-  int r, secondTreasPos, expectedCardsDrawn;
+  int r, expectedCardsDrawn;
+  int secondTreasPos = -1;
   int handTreasures = 0;
   int deckTreasures = 0;
   int discTreasures = 0;
@@ -21,12 +22,7 @@ int checkAdventurer(int p, struct gameState *post) {
 
   r = p_adventurer(post, p);
 
-  // Check if deck has 2 less treasures
-  // Check if hand has 2 more treasures
-  // If deck only had 1 treasure, check if deck is shuffled
-    // If discard had +1 treasure, check if hand has 2 more treasures
-    // Otherwise check if hand has 1 more treasure
-    //
+
     int x;
     //Get number of treasures in pre hand
     for(x = 0; x < pre.handCount[p]; x++){
@@ -41,7 +37,6 @@ int checkAdventurer(int p, struct gameState *post) {
                 deckTreasures++;
                 if(deckTreasures == 2){
                     secondTreasPos = x;
-                    break;
                 }
             }
         }
@@ -52,38 +47,83 @@ int checkAdventurer(int p, struct gameState *post) {
         for(y = pre.discardCount[p]-1; y >= 0; y--){
             if (pre.discard[p][y] == copper || pre.discard[p][y] == silver || pre.discard[p][y] == gold){
                 deckTreasures++;
+                secondTreasPos = -1;
             }
         }
     }
     //If there are enough treasures, get how many cards will be drawn
     else{
-        expectedCardsDrawn = pre.deckCount[p] - x - 2;
+        expectedCardsDrawn = pre.deckCount[p] - secondTreasPos - 2;
     }
 
     // Now we have the number of treasures in hand
     // Now we have, if there are 2 treasures in deck, the position of the second treasure
         // Check expectedCardsDrawn with discard pile.
 
-    // Now we have, if there is only 1 treasure in deck/discard, the fact thereof.
-        // Check
+    // Now we have, if there is only 0 or 1 treasure in deck/discard, the fact thereof.
+        // Check if there are no cards in deck (has yet to shuffle)
+        // Check if hand gained treasures
+        // Check if deck/discard has lost treasures
+
+    // If
+        // Check if deck has 2 less treasures
+        // Check if hand has 2 more treasures
+        // If deck only had 1 treasure, check if deck is shuffled
+          // If discard had +1 treasure, check if hand has 2 more treasures
+          // Otherwise check if hand has 1 more treasure
+          //
 
 
-  if (pre.deckCount[p] > 0) {
-    pre.handCount[p]++;
-    pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1];
-    pre.deckCount[p]--;
-  } else if (pre.discardCount[p] > 0) {
-    memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]);
-    memcpy(pre.discard[p], post->discard[p], sizeof(int)*pre.discardCount[p]);
-    pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1];
-    pre.handCount[p]++;
-    pre.deckCount[p] = pre.discardCount[p]-1;
-    pre.discardCount[p] = 0;
-  }
 
-  assert (r == 0);
+    //IF TWO TREASURES:
+        // Check if deck has 2 less treasures
+        // check if hand gained 2 treasures
+        // check if discard gained expected amount of cards
+    if (deckTreasures > 2){
+        // printf("post->deckCount[p] == (pre.deckCount[p] + 2) \n %d == %d\n",post->deckCount[p], (pre.deckCount[p] - expectedCardsDrawn));
+        // ASSERTTRUE(post->deckCount[p] == (pre.deckCount[p] + 2));
+        int it = 0;
+        int numtreas = 0;
+        for (it = 0; it < post->deckCount[p]; it++) {
+            if (post->deck[p][it] == copper || post->deck[p][it] == silver || post->deck[p][it] == gold)
+            numtreas++;
+        }
+        // printf("numtreas == (deckTreasures - 2) \n %d == %d\n", numtreas, deckTreasures-2 );
+        ASSERTTRUE(numtreas == (deckTreasures - 2));
+        numtreas = 0;
+        for (it = 0; it < post->handCount[p]; it++) {
+            if (post->hand[p][it] == copper || post->hand[p][it] == silver || post->hand[p][it] == gold)
+            numtreas++;
+        }
+        ASSERTTRUE(numtreas == (handTreasures + 2));
+        ASSERTTRUE(post->discardCount[p] == (pre.discardCount[p] + expectedCardsDrawn));
+        //
+        // if(post->discardCount[p] != (pre.discardCount[p] + expectedCardsDrawn)){
+        //     printf("post->discardCount[p] == (pre.discardCount[p] + expectedCardsDrawn)\n %5d == %-23d\n", post->discardCount[p], pre.discardCount[p] + expectedCardsDrawn);
+        // }
+    }
 
-  assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);
+
+
+
+
+  //
+  // if (pre.deckCount[p] > 0) {
+  //   pre.handCount[p]++;
+  //   pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1];
+  //   pre.deckCount[p]--;
+  // } else if (pre.discardCount[p] > 0) {
+  //   memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]);
+  //   memcpy(pre.discard[p], post->discard[p], sizeof(int)*pre.discardCount[p]);
+  //   pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1];
+  //   pre.handCount[p]++;
+  //   pre.deckCount[p] = pre.discardCount[p]-1;
+  //   pre.discardCount[p] = 0;
+  // }
+  //
+  // assert (r == 0);
+  //
+  // assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);
 }
 
 int main () {
