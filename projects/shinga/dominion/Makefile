@@ -94,4 +94,4 @@ player: player.c interface.o
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
-	rm -f *.o unittestresults.out unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.exe *.gcov *.gcda *.gcno *.so
+	rm -f *.o randomtestcard1 randomtestcard2 randomtestadventurer randomtestresults.out unittestresults.out unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.exe *.gcov *.gcda *.gcno *.so

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <math.h>
 #include "myassert.h"
 #include "rngs.h"
 #include "interface.h"
@@ -17,11 +18,10 @@ int checkAdventurer(int p, struct gameState *post) {
   int secondTreasPos = -1;
   int handTreasures = 0;
   int deckTreasures = 0;
-  int discTreasures = 0;
 
 
   r = p_adventurer(post, p);
-
+  ASSERTTRUE(r == 0);
 
     int x;
     //Get number of treasures in pre hand
@@ -68,9 +68,6 @@ int checkAdventurer(int p, struct gameState *post) {
     // If
         // Check if deck has 2 less treasures
         // Check if hand has 2 more treasures
-        // If deck only had 1 treasure, check if deck is shuffled
-          // If discard had +1 treasure, check if hand has 2 more treasures
-          // Otherwise check if hand has 1 more treasure
           //
 
 
@@ -88,7 +85,6 @@ int checkAdventurer(int p, struct gameState *post) {
             if (post->deck[p][it] == copper || post->deck[p][it] == silver || post->deck[p][it] == gold)
             numtreas++;
         }
-        // printf("numtreas == (deckTreasures - 2) \n %d == %d\n", numtreas, deckTreasures-2 );
         ASSERTTRUE(numtreas == (deckTreasures - 2));
         numtreas = 0;
         for (it = 0; it < post->handCount[p]; it++) {
@@ -97,41 +93,38 @@ int checkAdventurer(int p, struct gameState *post) {
         }
         ASSERTTRUE(numtreas == (handTreasures + 2));
         ASSERTTRUE(post->discardCount[p] == (pre.discardCount[p] + expectedCardsDrawn));
-        //
-        // if(post->discardCount[p] != (pre.discardCount[p] + expectedCardsDrawn)){
-        //     printf("post->discardCount[p] == (pre.discardCount[p] + expectedCardsDrawn)\n %5d == %-23d\n", post->discardCount[p], pre.discardCount[p] + expectedCardsDrawn);
-        // }
+
     }
 
+    // If deck only had 1 treasure, check if deck is shuffled
+    // If discard had +1 treasure, check if hand has 2 more treasures
+    // Otherwise check if hand has 1 more treasure
+    if (deckTreasures < 2) {
+        int it = 0;
+        int numtreas = 0;
+        for (it = 0; it < post->deckCount[p]; it++) {
+            if (post->deck[p][it] == copper || post->deck[p][it] == silver || post->deck[p][it] == gold)
+            numtreas++;
+        }
+        for (it = 0; it < post->discardCount[p]; it++) {
+            if (post->discard[p][it] == copper || post->discard[p][it] == silver || post->discard[p][it] == gold)
+            numtreas++;
+        }
+        ASSERTTRUE(numtreas == 0);
+        numtreas = 0;
+        for (it = 0; it < post->handCount[p]; it++) {
+            if (post->hand[p][it] == copper || post->hand[p][it] == silver || post->hand[p][it] == gold)
+            numtreas++;
+        }
+        ASSERTTRUE(numtreas == (handTreasures + deckTreasures));
+    }
 
-
-
-
-  //
-  // if (pre.deckCount[p] > 0) {
-  //   pre.handCount[p]++;
-  //   pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1];
-  //   pre.deckCount[p]--;
-  // } else if (pre.discardCount[p] > 0) {
-  //   memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]);
-  //   memcpy(pre.discard[p], post->discard[p], sizeof(int)*pre.discardCount[p]);
-  //   pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1];
-  //   pre.handCount[p]++;
-  //   pre.deckCount[p] = pre.discardCount[p]-1;
-  //   pre.discardCount[p] = 0;
-  // }
-  //
-  // assert (r == 0);
-  //
-  // assert(memcmp(&pre, post, sizeof(struct gameState)) == 0);
+    return 0;
 }
 
 int main () {
 
-  int i, n, m, r, p, deckCount, discardCount, handCount;
-
-  int k[10] = {adventurer, council_room, feast, gardens, mine,
-	       remodel, smithy, village, baron, great_hall};
+  int i, n, m, p;
 
   struct gameState G;
 
@@ -141,7 +134,7 @@ int main () {
 
   SelectStream(2);
   PutSeed(3);
-
+  printf("TESTING 2000 TIMES\n");
   for (n = 0; n < 2000; n++) {
     for (i = 0; i < sizeof(struct gameState); i++) {
       ((char*)&G)[i] = floor(Random() * 256);
@@ -159,32 +152,10 @@ int main () {
     for(m = 0; m < G.discardCount[p]; m++){
         G.discard[p][m] = floor(Random() * 26);
     }
-
     checkAdventurer(p, &G);
   }
 
-  printf ("ALL TESTS OK\n");
 
   exit(0);
-
-  printf ("SIMPLE FIXED TESTS.\n");
-  for (p = 0; p < 2; p++) {
-    for (deckCount = 0; deckCount < 5; deckCount++) {
-      for (discardCount = 0; discardCount < 5; discardCount++) {
-	for (handCount = 0; handCount < 5; handCount++) {
-	  memset(&G, 23, sizeof(struct gameState));
-	  r = initializeGame(2, k, 1, &G);
-	  G.deckCount[p] = deckCount;
-	  memset(G.deck[p], 0, sizeof(int) * deckCount);
-	  G.discardCount[p] = discardCount;
-	  memset(G.discard[p], 0, sizeof(int) * discardCount);
-	  G.handCount[p] = handCount;
-	  memset(G.hand[p], 0, sizeof(int) * handCount);
-	  checkDrawCard(p, &G);
-	}
-      }
-    }
-  }
-
   return 0;
 }
