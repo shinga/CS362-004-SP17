@@ -1,7 +1,16 @@
+/****************************
+ *  randomtestcard1.c
+ *  Random test for the p_smithy function
+ *  Arthur Shing CS362 SP2017
+ ***************************/
+
+
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <math.h>
 #include "myassert.h"
@@ -58,14 +67,12 @@ int checkSmithy(int p, struct gameState *post) {
   // int di = (d1 - d2) * sizeof(struct gameState);
   // // printf("%x",di);
   ASSERTTRUE(memcmp(&pre, post, sizeof(struct gameState)) == 0);
+  return 0;
 }
 
 int main () {
 
-  int i, n, r, p, deckCount, discardCount, handCount;
-
-  int k[10] = {adventurer, council_room, feast, gardens, mine,
-	       remodel, smithy, village, baron, great_hall};
+  int i, n, p;
 
   struct gameState G;
 
@@ -75,7 +82,7 @@ int main () {
 
   SelectStream(2);
   PutSeed(3);
-
+  printf("TESTING 2000 TIMES\n");
   for (n = 0; n < 2000; n++) {
     for (i = 0; i < sizeof(struct gameState); i++) {
       ((char*)&G)[i] = floor(Random() * 256);
@@ -87,7 +94,7 @@ int main () {
     checkSmithy(p, &G);
   }
 
-  printf ("ALL TESTS OK\n");
+  printf ("IF NO FAILURES, ALL TESTS OK\n");
 
   exit(0);
 

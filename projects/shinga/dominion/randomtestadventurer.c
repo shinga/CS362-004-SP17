@@ -1,7 +1,16 @@
+/****************************
+ *  randomtestcardaventurer.c
+ *  Random test for the p_adventurer function
+ *  Arthur Shing CS362 SP2017
+ ***************************/
+
+
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <math.h>
 #include "myassert.h"
@@ -128,7 +137,7 @@ int main () {
 
   struct gameState G;
 
-  printf ("Testing drawCard.\n");
+  printf ("Testing p_adventurer.\n");
 
   printf ("RANDOM TESTS.\n");
 

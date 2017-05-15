@@ -55,18 +55,28 @@ randomtestadventurer: randomtestadventurer.c dominion.o rngs.o myassert.o interf
 
 randomtestcard1.out: randomtestcard1
 	./randomtestcard1 > randomtestcard1.out
-	gcov -b dominion.o >> randomtestcard1.out
+	gcov -b -f dominion.o >> randomtestcard1.out
 
 randomtestcard2.out: randomtestcard2
 	./randomtestcard2 > randomtestcard2.out
-	gcov -b dominion.o >> randomtestcard2.out
+	gcov -b -f dominion.o >> randomtestcard2.out
 
 randomtestadventurer.out: randomtestadventurer
 	./randomtestadventurer > randomtestadventurer.out
-	gcov -b dominion.o >> randomtestadventurer.out
+	gcov -b -f dominion.o >> randomtestadventurer.out
 
-testAll: dominion.o testSuite.c
-	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
+testRandom: randomtestcard1 randomtestcard2 randomtestadventurer dominion.o
+	./randomtestcard1 > randomtestcard1.out
+	gcov -b -f dominion.o >> randomtestcard1.out
+	cat ./randomtestcard1.out > randomtests.out
+	./randomtestcard2 > randomtestcard2.out
+	gcov -b -f dominion.o >> randomtestcard2.out
+	cat ./randomtestcard2.out >> randomtests.out
+	 ./randomtestadventurer > randomtestadventurer.out
+	gcov -b -f dominion.o >> randomtestadventurer.out
+	cat ./randomtestadventurer.out >> randomtests.out
+# testAll: dominion.o testSuite.c
+	# gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
 
 runtests: testDrawCard
 	./testDrawCard &> unittestresult.out
@@ -75,17 +85,17 @@ runtests: testDrawCard
 
 unittestresults.out: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 dominion.o
 	./unittest1 > unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 	./unittest2 >> unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 	./unittest3 >> unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 	./unittest4 >> unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 	./cardtest1 >> unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 	./cardtest2 >> unittestresults.out
-	gcov -b dominion.o >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
 
 
 
