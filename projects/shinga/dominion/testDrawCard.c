@@ -15,7 +15,7 @@ int checkDrawCard(int p, struct gameState *post) {
   int r;
   //  printf ("drawCard PRE: p %d HC %d DeC %d DiC %d\n",
   //	  p, pre.handCount[p], pre.deckCount[p], pre.discardCount[p]);
-    
+
   r = drawCard (p, post);
 
   //printf ("drawCard POST: p %d HC %d DeC %d DiC %d\n",
@@ -23,12 +23,12 @@ int checkDrawCard(int p, struct gameState *post) {
 
   if (pre.deckCount[p] > 0) {
     pre.handCount[p]++;
-    pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1];
+    pre.hand[p][pre.handCount[p]-1] = pre.deck[p][pre.deckCount[p]-1]; //Set hand to as if it drew a card
     pre.deckCount[p]--;
   } else if (pre.discardCount[p] > 0) {
-    memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]);
+    memcpy(pre.deck[p], post->deck[p], sizeof(int) * pre.discardCount[p]); //
     memcpy(pre.discard[p], post->discard[p], sizeof(int)*pre.discardCount[p]);
-    pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1];
+    pre.hand[p][post->handCount[p]-1] = post->hand[p][post->handCount[p]-1]; // set pre hand to what post hand has
     pre.handCount[p]++;
     pre.deckCount[p] = pre.discardCount[p]-1;
     pre.discardCount[p] = 0;
@@ -75,7 +75,7 @@ int main () {
     for (deckCount = 0; deckCount < 5; deckCount++) {
       for (discardCount = 0; discardCount < 5; discardCount++) {
 	for (handCount = 0; handCount < 5; handCount++) {
-	  memset(&G, 23, sizeof(struct gameState)); 
+	  memset(&G, 23, sizeof(struct gameState));
 	  r = initializeGame(2, k, 1, &G);
 	  G.deckCount[p] = deckCount;
 	  memset(G.deck[p], 0, sizeof(int) * deckCount);
