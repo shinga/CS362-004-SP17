@@ -30,7 +30,7 @@ int main() {
 
     printf("Card Test 2\n");
 
-    printf ("TESTING p_adventurer():\n");
+    printf ("TESTING playAdventurer():\n");
 
     for (p = 0; p < numPlayers; p++)
     {
@@ -74,7 +74,7 @@ int main() {
 
 
 
-            p_adventurer(&G, p);
+            playAdventurer(&G);
 
             int j;
             // Test if cards were discarded
@@ -105,7 +105,7 @@ int main() {
             // printHand(p,&G);
             // printDeck(p,&G);
 
-            p_adventurer(&G, p);
+            playAdventurer(&G);
 
             // Test if victory/kingdom supply was untouched
             for(i = 0; i < 25; i++){

@@ -83,7 +83,7 @@ runtests: testDrawCard
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-unittestresults.out: unittest1 unittest2 unittest3 unittest4 dominion.o
+unittestresults.out: unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 dominion.o
 	./unittest1 > unittestresults.out
 	gcov -b -f dominion.o >> unittestresults.out
 	./unittest2 >> unittestresults.out
@@ -91,6 +91,10 @@ unittestresults.out: unittest1 unittest2 unittest3 unittest4 dominion.o
 	./unittest3 >> unittestresults.out
 	gcov -b -f dominion.o >> unittestresults.out
 	./unittest4 >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
+	./cardtest1 >> unittestresults.out
+	gcov -b -f dominion.o >> unittestresults.out
+	./cardtest2 >> unittestresults.out
 	gcov -b -f dominion.o >> unittestresults.out
 
 

@@ -1,0 +1,32 @@
+I was able to find two bugs in Hantao’s playSmithy function.
+ In my test cardtest1, which tests playing the smithy card, Hantao’s dominion was failing the first four assertions but passing the last one:
+
+        // Test if 3 cards are drawn
+        ASSERTTRUE(G.handCount[p] == tempHandCount + 3);
+        // Test if correct card (smithy) was discarded
+        ASSERTTRUE(G.playedCards[G.playedCardCount] == smithy);
+        // Test if deck lost 3
+        ASSERTTRUE(G.deckCount[p] == tempDeckCount - 3);
+        // Test if other player's state is unchanged (deck, hand, discard)
+        for (pl = 0; pl < numPlayers; pl++){
+            if(pl != p){
+                ASSERTTRUE(G.handCount[pl] == tPlayerHand[pl]);
+                ASSERTTRUE(G.deckCount[pl] == tPlayerDeck[pl]);
+                }
+        }
+
+From this, I could see that three cards were not drawn from the deck, the correct card was not being discarded, and the other player was losing a card in his instead.
+Because the other player’s decks did not change, it is probably the case that cards are either being drawn from the other player’s hand, or a card is discarded from the other player’s hand, and an incorrect amount of cards are being drawn from the deck.
+The cause of these bugs are in lines 679 and 683 of Hantao’s dominion.c code.
+The first one is where the for loop for drawCard() runs 4 times:
+for (i = 0; i < 4; i++){
+		    drawCard(currentPlayer, state);
+	}
+
+The other bug is where discardCard() is passed the next player instead of the current player:
+
+discardCard(handPos, currentPlayer+1, state, 0);
+
+The severity of the bugs are not too severe, because they do not break the game.
+However, they break the rules of the game.
+While dominion can still be played with these bugs in effect, it will not be played correctly because smithy does not do what it says it does. 
