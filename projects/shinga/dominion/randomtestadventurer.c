@@ -29,7 +29,7 @@ int checkAdventurer(int p, struct gameState *post) {
   int deckTreasures = 0;
 
 
-  r = playAdventurer(post);
+  r = p_adventurer(post, p);
   ASSERTTRUE(r == 0);
 
     int x;
@@ -149,11 +149,6 @@ int main () {
       ((char*)&G)[i] = floor(Random() * 256);
     }
     p = floor(Random() * 2);
-    for(m = 0; m < 3; m++){
-        G.deckCount[m] = floor(Random() * MAX_DECK);
-        G.discardCount[m] = floor(Random() * MAX_DECK);
-        G.handCount[m] = floor(Random() * MAX_HAND);
-    }
     G.deckCount[p] = floor(Random() * MAX_DECK);
     G.discardCount[p] = floor(Random() * MAX_DECK);
     G.handCount[p] = floor(Random() * MAX_HAND);
@@ -166,7 +161,6 @@ int main () {
     for(m = 0; m < G.discardCount[p]; m++){
         G.discard[p][m] = floor(Random() * 26);
     }
-    G.whoseTurn = p
     checkAdventurer(p, &G);
   }
 
