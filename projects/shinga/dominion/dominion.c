@@ -679,7 +679,7 @@ int p_smithy(struct gameState *state, int currentPlayer, int handPos){
         drawCard(currentPlayer, state);
     }
     //discard card from hand
-    // discardCard(handPos, currentPlayer, state, 0); // BUG HERE
+    discardCard(handPos, currentPlayer, state, 0); // BUG HERE
     return 0;
 }
 

@@ -59,10 +59,10 @@ int main() {
         }
         p_smithy(&G, p, G.handCount[p]-1);
 
-        // Test if 3 cards are drawn
-        ASSERTTRUE(G.handCount[p] == tempHandCount + 3);
+        // Test if 3 cards are drawn, and one discarded (smithy)
+        ASSERTTRUE(G.handCount[p] == tempHandCount + 2);
         // Test if correct card (smithy) was discarded
-        ASSERTTRUE(G.playedCards[G.playedCardCount] == smithy);
+        ASSERTTRUE(G.playedCards[G.playedCardCount-1] == smithy);
         // Test if deck lost 3
         ASSERTTRUE(G.deckCount[p] == tempDeckCount - 3);
         // Test if other player's state is unchanged (deck, hand, discard)
@@ -83,7 +83,7 @@ int main() {
 
     }
 
-    // printf("All tests passed!\n");
+    printf("If no assert errors, all tests passed!\n");
 
     return 0;
 }

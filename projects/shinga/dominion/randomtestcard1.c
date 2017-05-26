@@ -55,10 +55,30 @@ int checkSmithy(int p, struct gameState *post) {
     pre.discardCount[p] = 0;
   }
 
+
+
+  pre.playedCards[pre.playedCardCount] = pre.hand[p][0];
+  pre.playedCardCount++;
+  if (0 == (pre.handCount[p] - 1)){
+      pre.handCount[p]--;
+  }
+  else if ( pre.handCount[p] == 1 ){
+      pre.handCount[p]--;
+  }
+  else{
+      pre.hand[p][0] = pre.hand[p][ (pre.handCount[p] - 1)];
+      pre.hand[p][pre.handCount[p] - 1] = -1;
+      pre.handCount[p]--;
+  }
+
+
   assert (r == 0);
   // printf("Handcount: %5d | %-10d \n", pre.handCount[p], post->handCount[p]);
+  // printf("PlayedCards: %5d | %-10d \n", pre.playedCards[0], post->playedCards[0]);
+  // printf("PlayedCardCOunt: %5d | %-10d \n", pre.playedCardCount, post->playedCardCount);
   // printf("Deckcount: %5d | %-10d \n", pre.deckCount[p], post->deckCount[p]);
   // printf("discardCount: %5d | %-10d \n", pre.discardCount[p], post->discardCount[p]);
+  // printf("hand0: %5d | %-10d \n", pre.hand[p][0], post->hand[p][0]);
   // printf("hand1: %5d | %-10d \n", pre.hand[p][pre.handCount[p]-1], post->hand[p][post->handCount[p]-1]);
   // printf("hand2: %5d | %-10d \n", pre.hand[p][pre.handCount[p]-2], post->hand[p][post->handCount[p]-2]);
   // printf("hand3: %5d | %-10d \n", pre.hand[p][pre.handCount[p]-3], post->hand[p][post->handCount[p]-3]);
@@ -72,7 +92,7 @@ int checkSmithy(int p, struct gameState *post) {
 
 int main () {
 
-  int i, n, p;
+  int i, n, m, p;
 
   struct gameState G;
 
@@ -88,9 +108,13 @@ int main () {
       ((char*)&G)[i] = floor(Random() * 256);
     }
     p = floor(Random() * 2);
-    G.deckCount[p] = floor(Random() * MAX_DECK);
-    G.discardCount[p] = floor(Random() * MAX_DECK);
-    G.handCount[p] = floor(Random() * MAX_HAND);
+    for(m = 0; m < 3; m++){
+        G.deckCount[m] = floor(Random() * MAX_DECK);
+        G.discardCount[m] = floor(Random() * MAX_DECK);
+        G.handCount[m] = floor(Random() * MAX_HAND);
+    }
+    G.whoseTurn = p;
+    G.playedCardCount = 0;
     checkSmithy(p, &G);
   }
 
