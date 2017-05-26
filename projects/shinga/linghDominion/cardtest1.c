@@ -31,7 +31,7 @@ int main() {
     int i, y;
 
     printf("Card Test 1\n");
-    printf ("TESTING p_smithy():\n");
+    printf ("TESTING playSmithy():\n");
 
     for (p = 0; p < numPlayers; p++)
     {
@@ -57,12 +57,12 @@ int main() {
             tPlayerHand[pl] = G.handCount[pl];
             tPlayerDeck[pl] = G.deckCount[pl];
         }
-        p_smithy(&G, p, G.handCount[p]-1);
+        playSmithy(&G, G.handCount[p]-1);
 
-        // Test if 3 cards are drawn, and one discarded (smithy)
-        ASSERTTRUE(G.handCount[p] == tempHandCount + 2);
+        // Test if 3 cards are drawn
+        ASSERTTRUE(G.handCount[p] == tempHandCount + 3);
         // Test if correct card (smithy) was discarded
-        ASSERTTRUE(G.playedCards[G.playedCardCount-1] == smithy);
+        ASSERTTRUE(G.playedCards[G.playedCardCount] == smithy);
         // Test if deck lost 3
         ASSERTTRUE(G.deckCount[p] == tempDeckCount - 3);
         // Test if other player's state is unchanged (deck, hand, discard)
@@ -83,7 +83,7 @@ int main() {
 
     }
 
-    printf("If no assert errors, all tests passed!\n");
+    // printf("All tests passed!\n");
 
     return 0;
 }
