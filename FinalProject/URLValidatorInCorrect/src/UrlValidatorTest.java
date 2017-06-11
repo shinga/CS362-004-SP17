@@ -219,23 +219,23 @@ public class UrlValidatorTest extends TestCase {
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-//	   for(int i = 0;i< protocolArr.length; i++)
-	   for(int i = 0;i< 1; i++)
+	   for(int i = 0;i< protocolArr.length; i++)
+	//    for(int i = 0;i< 1; i++)
 	   {
-//		   for (int j = 0; j < domainArr.length; j++)
-		   for (int j = 0; j < 1; j++)
+		   for (int j = 0; j < domainArr.length; j++)
+		//    for (int j = 0; j < 1; j++)
 		   {
-//			   for (int k = 0; k < portArr.length; k++)
-			   for (int k = 0; k < 1; k++)
+			   for (int k = 0; k < portArr.length; k++)
+			//    for (int k = 0; k < 1; k++)
 			   {
 				   for (int l = 0; l < pathArr.length; l++)
-//				   for (int l = 0; l < 3; l++)
+				//    for (int l = 0; l < 3; l++)
 				   {
-//					   for (int m = 0; m < queryArr.length; m++)
-					   for (int m = 0; m < 1; m++)
+					   for (int m = 0; m < queryArr.length; m++)
+					//    for (int m = 0; m < 1; m++)
 					   {
-						   String url = protocolArr[i].item+domainArr[j].item+portArr[k].item+pathArr[6].item+queryArr[2].item;
-						   if (protocolArr[i].valid && domainArr[j].valid && portArr[k].valid && pathArr[6].valid && queryArr[2].valid)
+						   String url = protocolArr[i].item+domainArr[j].item+portArr[k].item+pathArr[l].item+queryArr[m].item;
+						   if (protocolArr[i].valid && domainArr[j].valid && portArr[k].valid && pathArr[l].valid && queryArr[m].valid)
 						   {
 							   try {
 								   assertTrue(urlVal.isValid(url));
